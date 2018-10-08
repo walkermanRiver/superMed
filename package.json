@@ -1,0 +1,31 @@
+{
+    "name": "superMed",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "description": "Hyperledger Fabric Car Sample Application",
+    "main": "fabcar.js",
+    "dependencies": {
+        "fabric-ca-client": "unstable",
+        "fabric-client": "^1.2.1",
+        "grpc": "^1.6.0",
+        "cookie-parser": "~1.4.3",
+        "debug": "~2.6.9",
+        "express": "~4.16.0",
+        "http-errors": "~1.6.2",
+        "jade": "~1.11.0",
+        "morgan": "~1.9.0",
+        "log4js": "^0.6.38"
+    },
+    "author": "Anthony O'Dowd",
+    "license": "Apache-2.0",
+    "keywords": [
+        "Hyperledger",
+        "Fabric",
+        "Car",
+        "Sample",
+        "Application"
+    ]
+}
