@@ -6,7 +6,7 @@
         "start": "node ./bin/www"
     },
     "description": "Hyperledger Fabric Car Sample Application",
-    "main": "fabcar.js",
+    "main": "app.js",
     "dependencies": {
         "fabric-ca-client": "unstable",
         "fabric-client": "^1.2.1",

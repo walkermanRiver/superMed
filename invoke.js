@@ -65,7 +65,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		// args: [''],
 		// chainId: 'mychannel',
 		// txId: tx_id
-		chaincodeId: 'fabcar',
+		chaincodeId: 'superMed',
 	  	fcn: 'createCar',
 	  	args: ['CAR10', 'BMW', 'SUV', 'white', 'Sunwei'],
 	  	chainId: 'mychannel',

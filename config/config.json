@@ -3,7 +3,7 @@
    "port":"4000",
    "jwt_expiretime": "36000",
    "channelName":"mychannel",
-   "chainCodeName":"fabcar",
+   "chainCodeName":"superMed",
    "orgName": "org1",
    "peerName": "peer1",
    "userName": "user1",
