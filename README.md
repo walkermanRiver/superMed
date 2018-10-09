@@ -13,3 +13,7 @@ Stop the application
 
 Access the web service
 http://localhost:4000/XXX
+get http://localhost:4000/userInfo/:userId
+get http://localhost:4000/userCaseRecord/:userId
+
+there is initial data for userId 1110103200007123333
