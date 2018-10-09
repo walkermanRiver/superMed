@@ -89,6 +89,23 @@ function invokeChainCode(req, res, next, fcn, args) {
     }
 }
 
+app.get('/userInfo/:userId', function(req, res, next) {
+  	logger.debug('==================== QUERY BY CHAINCODE ==================');	
+  	let userId = req.params.userId;
+	let fcn = "getUser";
+	let args = [userId];
+
+	queryChainCode(req, res, next, fcn, args);
+});
+
+app.get('/userCaseRecord/:userId', function(req, res, next) {
+  	logger.debug('==================== QUERY BY CHAINCODE ==================');	
+  	let userId = req.params.userId;
+	let fcn = "queryUserCaseHistory";
+	let args = [userId];
+
+	queryChainCode(req, res, next, fcn, args);
+});
 
 app.get('/allCars', function(req, res, next) {
   	logger.debug('==================== QUERY BY CHAINCODE ==================');	

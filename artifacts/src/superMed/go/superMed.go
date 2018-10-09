@@ -43,6 +43,25 @@ import (
 type SmartContract struct {
 }
 
+type UserInfo struct {	
+	Name  string `json:"name"`
+	Gender string `json:"gender"`
+	Age  int `json:"age"`
+	Weight   int `json:"weight"`
+	Height   int `json:"height"`
+}
+
+type CaseRecord struct {
+	CaseID   string `json:"caseid"`
+	UserId  string `json:"userid"`
+	HospitalId string `json:"hospitalid"`
+	PatientNumber  string `json:"patientnumber"`
+	Timestamp   string `json:"timestamp"`
+	Department   string `json:"department"`
+	Doctor   string `json:"doctor"`
+	Symptom   string `json:"symptom"`
+}
+
 // Define the car structure, with 4 properties.  Structure tags are used by encoding/json library
 type Car struct {
 	Make   string `json:"make"`
@@ -56,6 +75,10 @@ type CarProp struct {
 	MakeTime   string `json:"makeTime"`
 	Factory	   string `json:"factory"`
 }
+
+
+const UserID_Prefix = "userId~"
+const Case_Prefix = "caseId~"
 
 /*
  * The Init method is called when the Smart Contract "fabcar" is instantiated by the blockchain network
@@ -74,7 +97,11 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	// Retrieve the requested Smart Contract function and arguments
 	function, args := APIstub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger appropriately
-	if function == "queryCar" {
+	if function == "getUser" {
+		return s.getUser(APIstub, args)
+	} else if function == "queryUserCaseHistory" {
+		return s.queryUserCaseHistory(APIstub, args)
+	} else if function == "queryCar" {
 		return s.queryCar(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
@@ -89,6 +116,115 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
+}
+
+func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
+	usersInfo := []UserInfo{
+		UserInfo{Name: "Tom1", Gender: "male", Age: 49, Weight: 45, Height: 167},
+		UserInfo{Name: "Tom2", Gender: "male", Age: 23, Weight: 68, Height: 161},
+		UserInfo{Name: "Tom3", Gender: "male", Age: 56, Weight: 76, Height: 178},
+		UserInfo{Name: "Tom4", Gender: "female", Age: 12, Weight: 67, Height: 163},
+		UserInfo{Name: "Tom5", Gender: "female", Age: 33, Weight: 48, Height: 183},
+	}
+
+	i := 0
+	for i < len(usersInfo) {
+		fmt.Println("i is ", i)
+		userInfoAsBytes, _ := json.Marshal(usersInfo[i])
+		APIstub.PutState(UserID_Prefix+strconv.Itoa(i)+"110103200007123333", userInfoAsBytes)
+		fmt.Println("Added", usersInfo[i])
+		i = i + 1
+	}
+
+	caseRecords := []CaseRecord{
+		CaseRecord{CaseID: "GUIERERDFS", UserId: "1110103200007123333", HospitalId: "HS", PatientNumber: "12", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
+		CaseRecord{CaseID: "GUIERERDFS", UserId: "1110103200007123333", HospitalId: "HS", PatientNumber: "12", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},	
+	}
+
+	i = 0
+	for i < len(caseRecords) {
+		fmt.Println("i is ", i)
+		caseRecordsAsBytes, _ := json.Marshal(caseRecords[i])
+		APIstub.PutState(Case_Prefix+"1110103200007123333", caseRecordsAsBytes)
+		fmt.Println("Added", caseRecords[i])
+		i = i + 1
+	}
+
+	
+	return s.initCarLedger(APIstub)
+	return shim.Success(nil)
+}
+
+func (s *SmartContract) getUser(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	userAsBytes, _ := APIstub.GetState(UserID_Prefix + args[0])
+	return shim.Success(userAsBytes)
+}
+
+func (s *SmartContract) queryUserCaseHistory(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if (len(args) == 0 || len(args) > 2){
+		return shim.Error("Incorrect number of arguments. Expecting 1 or 2 arguments")
+	}
+
+	var userCaseKey = Case_Prefix + args[0]
+	resultsIterator, err := APIstub.GetHistoryForKey(userCaseKey)
+
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	// buffer is a JSON array containing QueryResults
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		buffer.WriteString("{\"TxId\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(queryResponse.TxId)
+
+		buffer.WriteString("\"")
+
+		buffer.WriteString(", \"Record\":")
+		// Record is a JSON object, so we write as-is		
+		buffer.WriteString(string(queryResponse.Value))
+
+		buffer.WriteString(", \"Timestamp\":")
+		buffer.WriteString("\"")		
+		buffer.WriteString(time.Unix(queryResponse.Timestamp.Seconds, int64(queryResponse.Timestamp.Nanos)).String())
+
+		buffer.WriteString("\"")
+
+
+
+
+
+		buffer.WriteString("}")
+		bArrayMemberAlreadyWritten = true
+	}
+	buffer.WriteString("]")
+
+	fmt.Printf("- queryUserCaseHistory:\n%s\n", buffer.String())
+
+	return shim.Success(buffer.Bytes())
+
 }
 
 func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -159,7 +295,7 @@ func (s *SmartContract) queryCarHistory(APIstub shim.ChaincodeStubInterface, arg
 
 }
 
-func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
+func (s *SmartContract) initCarLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	cars := []Car{
 		Car{Make: "Toyota", Model: "Prius", Colour: "blue", Owner: "Tomoko", Prop: CarProp{MakeTime: "20180927", Factory: "changcheng" }},
 		Car{Make: "Ford", Model: "Mustang", Colour: "red", Owner: "Brad"},
