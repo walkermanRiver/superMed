@@ -11,7 +11,8 @@ set -e
 export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
 LANGUAGE=${1:-"golang"}
-CC_SRC_PATH=github.com/superMed/go
+# CC_SRC_PATH=github.com/superMed
+CC_SRC_PATH=github.com/hyperledger/fabric/examples/chaincode/
 #CC_SRC_PATH=$(cd `dirname $0`; pwd)
 # CC_SRC_PATH=$(dirname $0)/chainCode/go
 # CC_SRC_PATH=chainCode/go
