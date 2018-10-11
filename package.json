@@ -8,8 +8,8 @@
     "description": "Hyperledger Fabric Car Sample Application",
     "main": "app.js",
     "dependencies": {
-        "fabric-ca-client": "unstable",
-        "fabric-client": "^1.2.1",
+        "fabric-ca-client": "~1.2.0",
+        "fabric-client": "~1.2.0",
         "grpc": "^1.6.0",
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
@@ -19,12 +19,12 @@
         "morgan": "~1.9.0",
         "log4js": "^0.6.38"
     },
-    "author": "Anthony O'Dowd",
+    "author": "bpcPoc",
     "license": "Apache-2.0",
     "keywords": [
         "Hyperledger",
         "Fabric",
-        "Car",
+        "Case history",
         "Sample",
         "Application"
     ]
