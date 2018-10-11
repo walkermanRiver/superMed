@@ -24,7 +24,9 @@ var queryChaincode = function(chaincodeName, args, fcn, username, org) {
 			for (let i = 0; i < response_payloads.length; i++) {
 				logger.info(args[0]+' now has ' + response_payloads[i].toString('utf8') +
 					' after the move');
-				return response_payloads[i].toString('utf8');
+				let vResult = JSON.parse(response_payloads[i].toString('utf8'));
+				logger.info('json.parse returns ' + vResult);
+				return vResult;
 			}
 		} else {
 			logger.error('response_payloads is null');

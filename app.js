@@ -44,10 +44,10 @@ function queryChainCode(req, res, next, fcn, args) {
 	logger.debug('args : ' + args);	
 
 	query.queryChaincode(chaincodeName, args, fcn, userName, orgname)
-	.then(function(message) {
+	.then(function(vResult) {
 		res.send({
             success: true,
-            message: message
+            result: vResult
         });
 	});
 }
@@ -65,16 +65,16 @@ function invokeChainCode(req, res, next, fcn, args) {
 
     try {
         invoke.invokeChaincode(peers, channelName, chaincodeName, fcn, args, userName, orgname)
-            .then(function(message) {
-            	if (message.indexOf('error') > -1) {
+            .then(function(vResult) {
+            	if (vResult.indexOf('error') > -1) {
                     res.send({
                         success: false,
-                        message: message
+                        result: vResult
                     });
 				}else {
                     res.send({
                         success: true,
-                        message: message
+                        result: vResult
                     });
 				}
 
