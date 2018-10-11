@@ -139,9 +139,9 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 	caseRecords := []CaseRecord{
 		CaseRecord{CaseID: "GUIERERDFS", UserId: "1110103200007123333", HospitalId: "HS", PatientNumber: "12", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
 		CaseRecord{CaseID: "GUIERERDFS", UserId: "1110103200007123333", HospitalId: "HS", PatientNumber: "12", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
-		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
-		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},
-		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛xxxxx"},	
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛1xxxxx"},
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛2xxxxx"},
+		CaseRecord{CaseID: "FDSFDSFT", UserId: "1110103200007123333", HospitalId: "ZS", PatientNumber: "33", Timestamp: "20180124",Department:"Internal Medicine",Doctor:"Xu",Symptom:"xx头痛3xxxxx"},	
 	}
 
 	i = 0
@@ -307,6 +307,7 @@ func (s *SmartContract) initCarLedger(APIstub shim.ChaincodeStubInterface) sc.Re
 		Car{Make: "Fiat", Model: "Punto", Colour: "violet", Owner: "Pari"},
 		Car{Make: "Tata", Model: "Nano", Colour: "indigo", Owner: "Valeria"},
 		Car{Make: "Holden", Model: "Barina", Colour: "brown", Owner: "Shotaro"},
+		Car{Make: "TSL", Model: "Barina", Colour: "white", Owner: "SW"},
 	}
 
 	i := 0
@@ -317,6 +318,8 @@ func (s *SmartContract) initCarLedger(APIstub shim.ChaincodeStubInterface) sc.Re
 		fmt.Println("Added", cars[i])
 		i = i + 1
 	}
+	carAsBytes, _ := json.Marshal(cars[10])
+	APIstub.PutState("CAR"+strconv.Itoa(10), carAsBytes)
 
 	return shim.Success(nil)
 }
