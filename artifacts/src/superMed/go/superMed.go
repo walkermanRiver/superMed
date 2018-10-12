@@ -101,7 +101,9 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.getUser(APIstub, args)
 	} else if function == "queryUserCaseHistory" {
 		return s.queryUserCaseHistory(APIstub, args)
-	} else if function == "queryCar" {
+	} else if function == "createCase" {
+		return s.createCase(APIstub, args)
+	}else if function == "queryCar" {
 		return s.queryCar(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
@@ -225,6 +227,20 @@ func (s *SmartContract) queryUserCaseHistory(APIstub shim.ChaincodeStubInterface
 
 	return shim.Success(buffer.Bytes())
 
+}
+
+func (s *SmartContract) createCase(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if len(args) != 9 {
+		return shim.Error("Incorrect number of arguments. Expecting 9")
+	}
+
+	var caseRecord = CaseRecord{CaseID: args[1], UserId: args[2], HospitalId: args[3], PatientNumber: args[4], Timestamp: args[5],Department: args[6],Doctor: args[7],Symptom: args[8]}
+
+	caseAsBytes, _ := json.Marshal(caseRecord)
+	APIstub.PutState(Case_Prefix+args[0], caseAsBytes)
+
+	return shim.Success(nil)
 }
 
 func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {

@@ -107,6 +107,16 @@ app.get('/userCaseRecord/:userId', function(req, res, next) {
 	queryChainCode(req, res, next, fcn, args);
 });
 
+// Invoke transaction on chaincode on target peers
+app.post('/case', function(req, res, next) {
+	logger.debug('==================== INVOKE ON CHAINCODE ==================');
+	
+	let fcn = "createCase";	
+	let args = req.body.args;
+
+    invokeChainCode(req, res, next, fcn, args);
+});
+
 app.get('/allCars', function(req, res, next) {
   	logger.debug('==================== QUERY BY CHAINCODE ==================');	
 
@@ -117,7 +127,7 @@ app.get('/allCars', function(req, res, next) {
 });
 
 // Invoke transaction on chaincode on target peers
-app.post('/case', function(req, res, next) {
+app.post('/car', function(req, res, next) {
 	logger.debug('==================== INVOKE ON CHAINCODE ==================');
 	
 	let fcn = "createCar";	
