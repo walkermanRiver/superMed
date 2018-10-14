@@ -22,6 +22,7 @@ var invoke = require('./app/invoke-transaction.js');
 
 
 var app = express();
+app.use('/static', express.static('public/src'))
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -88,6 +89,19 @@ function invokeChainCode(req, res, next, fcn, args) {
         return null;
     }
 }
+
+app.get(['/','/index.html'], function(req, res, next) {
+	let sPath = path.join(__dirname, 'public/src','index.html');	
+  	res.sendFile(sPath);
+});
+
+// app.get('/', function(req, res, next) {
+//   	res.sendFile(path.join(__dirname, 'index.html'));
+// });
+
+// app.get('/index.html', function(req, res, next) {
+//   	res.sendFile(path.join(__dirname, 'index.html'));
+// });
 
 app.get('/userInfo/:userId', function(req, res, next) {
   	logger.debug('==================== QUERY BY CHAINCODE ==================');	
