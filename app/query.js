@@ -19,18 +19,19 @@ var queryChaincode = function(chaincodeName, args, fcn, username, org) {
 		return 'Failed to get submitter \''+username+'\'. Error: ' + err.stack ? err.stack :
 			err;
 	}).then((response_payloads) => {
-		console.log("Query has completed, checking results");		
+		console.log("Query has completed, checking results");			
 		if (response_payloads) {
-			let aResult = [];
-			for (let i = 0; i < response_payloads.length; i++) {
-				logger.info(args[0]+' now has ' + response_payloads[i].toString('utf8') +
-					' after the move');
-				let vResult = JSON.parse(response_payloads[i].toString('utf8'));
-				aResult.push(vResult);
-				logger.info('json.parse returns ' + vResult);				
-			}
-			logger.info('result array length is ' + aResult.length);
-			return aResult;
+			// let aResult = [];
+			//only get the first result
+			// for (let i = 0; i < response_payloads.length; i++) {
+			let sResult = response_payloads[0].toString('utf8');
+			console.log("Response is ", sResult);
+			let vResult = JSON.parse(sResult);
+			return vResult;
+			// aResult.push(vResult);							
+			// }
+			// logger.info('result array length is ' + aResult.length);
+			// return aResult;
 		} else {
 			logger.error('response_payloads is null');
 			return 'response_payloads is null';
