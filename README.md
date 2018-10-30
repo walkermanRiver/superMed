@@ -11,6 +11,9 @@ npm install <br>
 ### Stop the application <br>
 ./stopFabric.sh <br>
 
+### Initialize data <br>
+npm run initData <br>
+
 ### Access the web service <br>
 http://localhost:4000/XXX <br>
 get http://localhost:4000/userInfo/:userId <br>

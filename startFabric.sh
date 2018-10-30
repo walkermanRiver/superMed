@@ -42,10 +42,12 @@ cd -
 node ./artifacts/network/enrollAdmin.js
 node ./artifacts/network/registerUser.js
 
+
 # ./artifacts/network/initializeData.sh
 
 printf "\nTotal setup execution time : $(($(date +%s) - starttime)) secs ...\n\n\n"
+printf "\nExecute npm run initData to initlize data  ...\n\n\n"
 printf "\nExecite the service with the url http://localhost:4000/XXX  ...\n\n\n"
-
 npm start
+
 # node ./bin/www
